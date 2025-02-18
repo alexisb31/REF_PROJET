@@ -15,8 +15,6 @@
                 <h2 class="text-lg font-semibold text-gray-700 mb-4">📝 Informations</h2>
                 <form id="jsonld-form" class="space-y-4">
                     <div>
-
-                        
                         <label class="block font-semibold text-gray-600">Type :</label>
                         <select id="type" class="w-full p-3 border border-gray-300 rounded-lg shadow-sm" onchange="handleCategoryChange()">
                             <option value="Article">Article</option>
@@ -48,13 +46,20 @@
 
                     <div id="product-fields" style="display: none;">
                         <div>
+                            <label class="block font-semibold text-gray-600">Nom du produit :</label>
+                            <input type="text" id="productName" class="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring focus:ring-blue-200">
+                        </div>
+                        <div>
                             <label class="block font-semibold text-gray-600">Marque :</label>
                             <input type="text" id="brand" class="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring focus:ring-blue-200">
                         </div>
-
                         <div>
                             <label class="block font-semibold text-gray-600">Prix :</label>
                             <input type="number" id="price" class="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring focus:ring-blue-200">
+                        </div>
+                        <div>
+                            <label class="block font-semibold text-gray-600">Description :</label>
+                            <textarea id="description" class="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring focus:ring-blue-200"></textarea>
                         </div>
                     </div>
 
@@ -75,6 +80,10 @@
                             <label class="block font-semibold text-gray-600">Lieu :</label>
                             <input type="text" id="location" class="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring focus:ring-blue-200">
                         </div>
+                        <div>
+                            <label class="block font-semibold text-gray-600">Adresse :</label>
+                            <input type="text" id="address" class="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring focus:ring-blue-200">
+                        </div>
                     </div>
 
                     <div id="organization-fields" style="display: none;">
@@ -83,8 +92,29 @@
                             <input type="text" id="organizationName" class="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring focus:ring-blue-200">
                         </div>
                         <div>
-                            <label class="block font-semibold text-gray-600">URL de l'organisation :</label>
+                            <label class="block font-semibold text-gray-600">URL :</label>
                             <input type="url" id="organizationUrl" class="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring focus:ring-blue-200">
+                        </div>
+                        <div>
+                            <label class="block font-semibold text-gray-600">Logo :</label>
+                            <input type="url" id="logo" class="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring focus:ring-blue-200">
+                        </div>
+                        <div>
+                            <label class="block font-semibold text-gray-600">Type de contact :</label>
+                            <input type="text" id="contactType" class="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring focus:ring-blue-200">
+                        </div>
+                    </div>
+
+                    <div id="telephone-field" style="display: none;">
+                        <label class="block font-semibold text-gray-600">Numéro de téléphone :</label>
+                        <div class="flex">
+                            <select id="countryCode" class="p-3 border border-gray-300 rounded-l-lg shadow-sm focus:ring focus:ring-blue-200">
+                                <option value="+33">🇫🇷 +33</option>
+                                <option value="+1">🇺🇸 +1</option>
+                                <option value="+44">🇬🇧 +44</option>
+                                <option value="+49">🇩🇪 +49</option>
+                            </select>
+                            <input type="tel" id="telephone" class="w-full p-3 border border-gray-300 rounded-r-lg shadow-sm focus:ring focus:ring-blue-200">
                         </div>
                     </div>
 
@@ -127,16 +157,22 @@
             };
 
             if (type === "Product") {
+                data.name = document.getElementById("productName").value;
                 data.brand = document.getElementById("brand").value;
                 data.price = document.getElementById("price").value;
+                data.description = document.getElementById("description").value;
             } else if (type === "Event") {
                 data.name = document.getElementById("eventName").value;
                 data.startDate = document.getElementById("startDate").value;
                 data.endDate = document.getElementById("endDate").value;
                 data.locationName = document.getElementById("location").value;
+                data.address = document.getElementById("address").value;
             } else if (type === "Organization") {
                 data.name = document.getElementById("organizationName").value;
                 data.url = document.getElementById("organizationUrl").value;
+                data.logo = document.getElementById("logo").value;
+                data.contactType = document.getElementById("contactType").value;
+                data.telephone = document.getElementById("telephone").value;
             }
 
             fetch("/generate-jsonld", {
@@ -158,17 +194,21 @@
             let productFields = document.getElementById("product-fields");
             let eventFields = document.getElementById("event-fields");
             let organizationFields = document.getElementById("organization-fields");
+            let telephoneField = document.getElementById("telephone-field");
 
             productFields.style.display = "none";
             eventFields.style.display = "none";
             organizationFields.style.display = "none";
+            telephoneField.style.display = "none";
 
             if (type === "Product") {
                 productFields.style.display = "block";
             } else if (type === "Event") {
                 eventFields.style.display = "block";
+                telephoneField.style.display = "block";
             } else if (type === "Organization") {
                 organizationFields.style.display = "block";
+                telephoneField.style.display = "block";
             }
         }
     </script>

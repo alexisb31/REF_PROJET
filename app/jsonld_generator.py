@@ -22,7 +22,6 @@ def generate_jsonld(content_type, data):
             "brand": data.get("brand", "Marque inconnu"),
             "price": data.get("price", "0.00"),
             "description": data.get("description", "Description non fourni"),
-            "sku": data.get("sku", "00000")
         }
     elif content_type == "Organization":
         return {
