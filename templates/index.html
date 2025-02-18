@@ -4,47 +4,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Générateur JSON-LD</title>
-    <script src="https://cdn.tailwindcss.com"></script>
     
-    <script>
-        function generateJSONLD() {
-            let type = document.getElementById("type").value;
-            let title = document.getElementById("title").value;
-            let author = document.getElementById("author").value;
-            let datePublished = document.getElementById("datePublished").value;
-            let url = document.getElementById("url").value;
-
-            let jsonLD = {
-                "@context": "https://schema.org",
-                "@type": type,
-                "headline": title,
-                "author": {
-                    "@type": "Person",
-                    "name": author
-                },
-                "datePublished": datePublished,
-                "mainEntityOfPage": {
-                    "@type": "WebPage",
-                    "@id": url
-                }
-            };
-
-            document.getElementById("jsonld-output").textContent = JSON.stringify(jsonLD, null, 4);
-        }
-    </script>
 </head>
 <body class="bg-gradient-to-r from-gray-900 to-gray-700 min-h-screen flex items-center justify-center p-6">
     <div class="w-full max-w-4xl bg-white shadow-2xl rounded-3xl p-8">
         <h1 class="text-3xl font-extrabold text-center text-gray-800 mb-6">🚀 Générateur Jayson</h1>
 
-   
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div class="p-6 bg-gray-100 rounded-xl shadow-md">
                 <h2 class="text-lg font-semibold text-gray-700 mb-4">📝 Informations</h2>
-                <form onsubmit="event.preventDefault(); generateJSONLD();" class="space-y-4">
+                <form id="jsonld-form" class="space-y-4">
                     <div>
+
+                        
                         <label class="block font-semibold text-gray-600">Type :</label>
-                        <select id="type" class="w-full p-3 border border-gray-300 rounded-lg shadow-sm">
+                        <select id="type" class="w-full p-3 border border-gray-300 rounded-lg shadow-sm" onchange="handleCategoryChange()">
                             <option value="Article">Article</option>
                             <option value="Product">Produit</option>
                             <option value="Event">Événement</option>
@@ -72,21 +46,131 @@
                         <input type="url" id="url" required class="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring focus:ring-blue-200">
                     </div>
 
-                    <button type="submit" 
+                    <div id="product-fields" style="display: none;">
+                        <div>
+                            <label class="block font-semibold text-gray-600">Marque :</label>
+                            <input type="text" id="brand" class="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring focus:ring-blue-200">
+                        </div>
+
+                        <div>
+                            <label class="block font-semibold text-gray-600">Prix :</label>
+                            <input type="number" id="price" class="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring focus:ring-blue-200">
+                        </div>
+                    </div>
+
+                    <div id="event-fields" style="display: none;">
+                        <div>
+                            <label class="block font-semibold text-gray-600">Nom de l'événement :</label>
+                            <input type="text" id="eventName" class="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring focus:ring-blue-200">
+                        </div>
+                        <div>
+                            <label class="block font-semibold text-gray-600">Date de début :</label>
+                            <input type="datetime-local" id="startDate" class="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring focus:ring-blue-200">
+                        </div>
+                        <div>
+                            <label class="block font-semibold text-gray-600">Date de fin :</label>
+                            <input type="datetime-local" id="endDate" class="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring focus:ring-blue-200">
+                        </div>
+                        <div>
+                            <label class="block font-semibold text-gray-600">Lieu :</label>
+                            <input type="text" id="location" class="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring focus:ring-blue-200">
+                        </div>
+                    </div>
+
+                    <div id="organization-fields" style="display: none;">
+                        <div>
+                            <label class="block font-semibold text-gray-600">Nom de l'organisation :</label>
+                            <input type="text" id="organizationName" class="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring focus:ring-blue-200">
+                        </div>
+                        <div>
+                            <label class="block font-semibold text-gray-600">URL de l'organisation :</label>
+                            <input type="url" id="organizationUrl" class="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring focus:ring-blue-200">
+                        </div>
+                    </div>
+
+                    <button type="submit"
                         class="w-full bg-yellow-400 hover:bg-yellow-500 text-black font-bold py-3 px-6 rounded-lg shadow-lg 
                             transition-all transform hover:scale-105 active:scale-95 animate-bounce"
                         onmouseover="this.classList.add('animate-wiggle')" 
                         onmouseout="this.classList.remove('animate-wiggle')">
-                        🎉 BOUM ! Génère ton JSON-LD 🚀
+                        🎉 ABRACADABRA !  🚀
                     </button>
 
                 </form>
             </div>
             <div class="p-6 bg-gray-900 rounded-xl shadow-md text-white">
                 <h2 class="text-lg font-semibold mb-4">📜 Jayson généré :</h2>
-                <pre id="jsonld-output" class="bg-gray-800 p-4 rounded-lg text-sm overflow-auto max-h-96"></pre>
+                <pre id="jsonld-output" class="bg-gray-800 p-4 rounded-lg text-sm overflow-auto max-h-96 text-green-500"></pre>
             </div>
         </div>
     </div>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        document.getElementById("jsonld-form").addEventListener("submit", function(event) {
+            event.preventDefault();
+            generateJSONLD();
+        });
+
+        function generateJSONLD() {
+            let type = document.getElementById("type").value;
+            let title = document.getElementById("title").value;
+            let author = document.getElementById("author").value;
+            let datePublished = document.getElementById("datePublished").value;
+            let url = document.getElementById("url").value;
+
+            let data = {
+                type: type,
+                headline: title,
+                author: author,
+                datePublished: datePublished,
+                url: url
+            };
+
+            if (type === "Product") {
+                data.brand = document.getElementById("brand").value;
+                data.price = document.getElementById("price").value;
+            } else if (type === "Event") {
+                data.name = document.getElementById("eventName").value;
+                data.startDate = document.getElementById("startDate").value;
+                data.endDate = document.getElementById("endDate").value;
+                data.locationName = document.getElementById("location").value;
+            } else if (type === "Organization") {
+                data.name = document.getElementById("organizationName").value;
+                data.url = document.getElementById("organizationUrl").value;
+            }
+
+            fetch("/generate-jsonld", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .then(jsonld => {
+                document.getElementById("jsonld-output").textContent = JSON.stringify(jsonld, null, 4);
+            })
+            .catch(error => console.error("Error:", error));
+        }
+
+        function handleCategoryChange() {
+            let type = document.getElementById("type").value;
+            let productFields = document.getElementById("product-fields");
+            let eventFields = document.getElementById("event-fields");
+            let organizationFields = document.getElementById("organization-fields");
+
+            productFields.style.display = "none";
+            eventFields.style.display = "none";
+            organizationFields.style.display = "none";
+
+            if (type === "Product") {
+                productFields.style.display = "block";
+            } else if (type === "Event") {
+                eventFields.style.display = "block";
+            } else if (type === "Organization") {
+                organizationFields.style.display = "block";
+            }
+        }
+    </script>
 </body>
 </html>
