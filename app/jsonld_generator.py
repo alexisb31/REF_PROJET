@@ -12,15 +12,6 @@ def generate_jsonld(content_type, data):
             "mainEntityOfPage": {
                 "@type": "WebPage",
                 "@id": data.get("url", "https://example.com")
-            },
-            "image": data.get("image", "https://example.com/image.jpg"),  
-            "publisher": {
-                "@type": "Organization",
-                "name": data.get("publisher", "Nom de l'éditeur"),
-                "logo": {
-                    "@type": "ImageObject",
-                    "url": data.get("publisherLogo", "https://example.com/logo.jpg")
-                }
             }
         }
     elif content_type == "Product":
@@ -28,19 +19,10 @@ def generate_jsonld(content_type, data):
             "@context": "https://schema.org",
             "@type": "Product",
             "name": data.get("name", "Produit inconnu"),
-            "brand": data.get("brand", "Marque inconnu"),
+            "brand": data.get("brand", "Marque inconnue"),
             "price": data.get("price", "0.00"),
-            "description": data.get("description", "Description non fourni"),
-            "sku": data.get("sku", "SKU inconnu"),  
-            "mpn": data.get("mpn", "MPN inconnu"),  
-            "image": data.get("image", "https://example.com/image.jpg"),  
-            "offers": {
-                "@type": "Offer",
-                "priceCurrency": data.get("priceCurrency", "USD"),
-                "price": data.get("price", "0.00"),
-                "availability": data.get("availability", "https://schema.org/InStock"),
-                "url": data.get("offerUrl", "https://example.com/produit")
-            }
+            "description": data.get("description", "Description non fournie"),
+            "sku": data.get("sku", "00000")
         }
     elif content_type == "Organization":
         return {
@@ -52,17 +34,7 @@ def generate_jsonld(content_type, data):
             "contactPoint": {
                 "@type": "ContactPoint",
                 "telephone": data.get("telephone", "000-000-0000"),
-                "contactType": data.get("contactType", "Service client"),
-                "email": data.get("email", "contact@example.com"),  
-                "areaServed": data.get("areaServed", "Zone desservie")  
-            },
-            "address": {
-                "@type": "PostalAddress",
-                "streetAddress": data.get("streetAddress", "Adresse inconnue"),
-                "addressLocality": data.get("addressLocality", "Localité inconnue"),
-                "addressRegion": data.get("addressRegion", "Région inconnue"),
-                "postalCode": data.get("postalCode", "Code postal inconnu"),
-                "addressCountry": data.get("addressCountry", "Pays inconnu")
+                "contactType": data.get("contactType", "Service client")
             }
         }
     elif content_type == "Event":
@@ -75,16 +47,8 @@ def generate_jsonld(content_type, data):
             "location": {
                 "@type": "Place",
                 "name": data.get("locationName", "Lieu inconnu"),
-                "address": data.get("address", "Adresse inconnu")
-            },
-            "description": data.get("description", "Description non fournie"),  
-            "image": data.get("image", "https://example.com/image.jpg"),  
-            "performer": {
-                "@type": "Person",
-                "name": data.get("performer", "Nom du performer") 
+                "address": data.get("address", "Adresse inconnue")
             }
         }
     else:
-        return {
-            "error": "Type de contenu non supporté"
-        }
+        return {"error": "Type de contenu non supporté"}
