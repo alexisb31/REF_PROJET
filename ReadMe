@@ -1,0 +1,22 @@
+# Générateur JSON-LD
+
+Cette application permet de générer des objets JSON-LD pour améliorer le référencement
+
+## Prérequis
+
+- Python
+- Flask
+
+## Installation
+
+1. Installez les dépendances :
+    ```bash
+    pip install flask
+    ```
+
+## Utilisation
+
+### Backend
+
+Le fichier [Jsonld_generator.py]contient la fonction [generate_jsonld] qui génère des objets JSON-LD en fonction du type de contenu et des données fournies.
+
