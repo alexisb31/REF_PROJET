@@ -13,6 +13,9 @@ Cette application permet de générer des objets JSON-LD pour améliorer le réf
     ```bash
     pip install flask
     ```
+2. run:  
+    python main.py
+
 
 ## Utilisation
 
